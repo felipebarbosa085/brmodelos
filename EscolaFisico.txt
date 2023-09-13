@@ -1,0 +1,23 @@
+create database escola;
+
+show databases;
+
+use escola;
+
+status
+
+create table Aluno (matricula int primary key auto_increment, nome varchar(80) not null, nascimento date, cpf char(14)not null unique, responsavel varchar(80) not null, email varchar(80) unique );
+
+ show databases;
+
+ use escola;
+
+show tables;
+
+describe Aluno;
+
+
+ create table turma (numero int primary key, turno char(1), definicao varchar(60));
+
+
+insert into aluno values ( 3001, 'Godofredo Henrique', '2000-03-15', '123.456.789-01', 'Godojane Maia', 'gh@email.com');
