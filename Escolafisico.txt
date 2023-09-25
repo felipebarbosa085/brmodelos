@@ -1,43 +1,98 @@
 create database escola;
 
-show databases;
-
 use escola;
 
-status
+create table Aluno ( matricula int primary key auto_increment, nome varchar(80) not null, nascimento date, cpf char(14) not null unique, responsavel varchar(80) not null, email varchar(80) unique );
 
-create table Aluno (matricula int primary key auto_increment, nome varchar(80) not null, nascimento date, cpf char(14)not null unique, responsavel varchar(80) not null, email varchar(80) unique );
+create table turma ( numero int primary key, turno char(1) not null, definicao varchar(60));
 
- show databases;
+create table disciplina ( cod_disciplina int primary key auto_increment, nome varchar(30) not null );
 
- use escola;
+create table estuda ( idEstuda int primary key auto_increment, fk_Aluno_matricula int not null, fk_Turma_numero int not null );
 
-show tables;
+create table possui ( idPossui int primary key auto_increment, fk_Disciplina_cod_disciplina int not null, fk_Turma_numero int not null );
 
-describe Aluno;
+create table professor ( matricula int primary key auto_increment, nome varchar(80) not null, formacao varchar(30));
+
+create table leciona ( idLeciona int primary key auto_increment, fk_Disciplina_cod_disciplina int not null, fk_Professor_matricula int not null );
 
 
- create table turma (numero int primary key, turno char(1), definicao varchar(60));
+
+alter table estuda add constraint fkmat foreign key (fk_Aluno_matricula) references Aluno (matricula);
+
+alter table estuda add constraint fknum foreign key (fk_Turma_numero) references Turma (numero);
+
+alter table possui add constraint fkdis foreign key ( fk_Disciplina_cod_disciplina ) references disciplina ( cod_disciplina ) ;
+
+alter table possui add constraint fktur foreign key ( fk_Turma_numero ) references turma ( numero ) ;
+
+alter table leciona add constraint fkdis2 foreign key ( fk_Disciplina_cod_disciplina ) references disciplina ( cod_disciplina ) ;
+
+alter table leciona add constraint fkpro foreign key ( fk_professor_matricula ) references professor ( matricula ) ;
 
 
-insert into aluno values ( 3001, 'Godofredo Henrique', '2000-03-15', '123.456.789-01', 'Godojane Maia', 'gh@email.com');
+insert into aluno values ( 3001, 'Godofredo Henrique', '2000-03-15', '123.456.789-01', 'Godojane Maia', 'gh@email.com' );
+insert into aluno values ( null, 'Josefina Winter', '1945-02-10', '123.456.789-02', 'Clenisbaldo Winter', null) ;
+insert into aluno values ( null, 'Ana Carolina','2001-07-11', '123.456.789-04', 'Maria Carolina', 'ac@email.com' );
+insert into aluno ( matricula, nome, nascimento, cpf, responsavel, email ) values ( null, 'Elias Sherman', '1995-03-02', '123.456.789-05', 'John Sherman', 'es@email.com' );
+insert into aluno ( nome, cpf, responsavel ) values ( 'Waldiney Mouse', '123.456.789-06', 'Wesley Keyboard' );
+insert into aluno ( cpf, matricula, nome, responsavel, email ) values ( '123.456.789-07', null, 'Genivaldo Williams', 'Clotilde Williams', 'gw@email.com' );
 
-create table disciplina (cod_disciplina int primary key auto_increment, nome varchar(30) not null);
+insert into turma values ( 2023080, 'M', 'Técnico de Informática' );
+insert into turma values ( 2023090, 'T', 'Técnico em Comunicação Visual' );
 
-create table estuda (id_Estuda int primary key auto_increment, fk_Aluno_matricula int not null, fk_Turma_numero int not null);
+insert into estuda values ( 7501, 3001, 2023090 );
+insert into estuda values ( null, 3005, 2023080 );
+insert into estuda values ( null, 3003, 2023090 );
+insert into estuda values ( null, 3004, 2023080 );
+insert into estuda values ( null, 3004, 2023090 );
+insert into estuda values ( null, 3006, 2023090 );
+insert into estuda values ( null, 3007, 2023080 );
 
- alter table estuda add constraint fkmat foreign key (fk_Aluno_matricula) references aluno (matricula);
+insert into disciplina values ( 21, 'Programação' );
+insert into disciplina values ( null, 'Redes' );
+insert into disciplina values ( null, 'Tratamento de Imagem' );
 
-alter table estuda add constraint fknum foreign key (fk_Turma_numero) references turma (numero);
+insert into possui values ( 341, 21, 2023080 );
+insert into possui values ( null, 22, 2023080 );
+insert into possui values ( null, 23, 2023090 );
 
- alter table possui add constraint fknul foreign key (fk_Turma_numero) references turma (numero);
+insert into professor values ( 1901, 'Sérgio Carlos', 'T.I.' );
+insert into professor values ( null, 'Vicente Silva', 'T.I.' );
+insert into professor values ( null, 'Flávia Albuquerque', 'Design' );
 
-create table possui (idPossui int primary key auto_increment, fk_Disciplina_cod_disciplina int not null, fk_Turma_numero int not null);
+insert into leciona values ( 601, 21, 1901 );
+insert into leciona values ( null, 22, 1902 );
+insert into leciona values ( null, 23, 1903 );
 
-create table professor (matricula int primary key auto_increment, nome varchar(30) not null, formacao varchar(30) not null);
 
-create table leciona (id_leciona int primary key auto_increment, fk_Disciplina_cod_disciplina int not null, fk_Professor_matricula int  not null);
+select * from aluno where nascimento = '2000-09-15';
 
-alter table leciona add constraint fklec foreign key (fk_Disciplina_cod_disciplina) references disciplina (cod_disciplina);
 
- alter table leciona add constraint fkprof foreign key (fk_professor_matricula) references professor (matricula);
+insert into aluno values (null,'Renata Mause', '1995-03-15', '123-456-789-08', 'Kelly Keybord ', 'renatmaus@email.com');
+
+
+
+
+ update aluno set nome = "Renata Mause Silva" where matricula = 3010;
+
+
+
+select * from aluno where nome like '% mause%';
+
+
+
+alter table professor add dependentes int;
+
+
+ update professor set dependentes = "3" where matricula = 1901;
+
+ update professor set dependentes = "2" where matricula = 1902;
+
+update professor set dependentes = "0" where matricula = 202024;
+
+select aluno.nome, turma.definicao,turma.turno from aluno, turma,estuda where aluno.matricula = estuda.fk_Aluno_matricula and fk_Turma_numero = turma.numero;
+
+select aluno.nome, turma.numero, disciplina.nome from aluno,estuda,turma,possui,disciplina where aluno.matricula = estuda.fk_aluno_matricula and estuda.fk_turma_numero = turma.numero and turma.numero = possui.fk_Turma_numero and  possui.fk_disciplina_cod_disciplina = disciplina.cod_disciplina;
+
+
