@@ -1,0 +1,13 @@
+1- Select nome, email from aluno where email is not null;
+
+2- select nome from professor where formacao = 'Tecnologia da Informação' order by nome;
+
+3- select * from aluno where matricula between 3004 and 3008;
+
+4- select numero  from turma where definicao = 'Tecnico de Informatica';
+
+5- select disciplina.nome from turma,possui,disciplina where turma.numero = possui.fk_turma_numero and possui.fk_Disciplina_cod_disciplina = disciplina.cod_disciplina and definicao = 'Tecnico de Informatica';
+
+6-select count(definicao) as 'Total de turmas de T.I' from turma where definicao = 'Tecnico de Informatica' or definicao = 'Técnico de Informática'
+
+7-
